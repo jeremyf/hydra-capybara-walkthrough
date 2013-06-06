@@ -40,6 +40,7 @@ GEM
       multi_json (~> 1.0)
     addressable (2.3.4)
     arel (3.0.2)
+    bcrypt-ruby (3.0.1)
     blacklight (4.2.1)
       bootstrap-sass (>= 2.2.0, < 2.4)
       kaminari (~> 0.13)
@@ -66,6 +67,13 @@ GEM
     daemons (1.1.9)
     deprecation (0.0.5)
       activesupport
+    devise (2.2.4)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (~> 3.1)
+      warden (~> 1.2.1)
+    devise-guests (0.3.1)
+      devise
     equivalent-xml (0.3.0)
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
@@ -128,6 +136,7 @@ GEM
       mediashelf-loggable
       nokogiri (>= 1.4.2)
       solrizer (~> 3.1.0)
+    orm_adapter (0.4.0)
     polyglot (0.3.3)
     rack (1.4.5)
     rack-cache (1.2)
@@ -204,6 +213,8 @@ GEM
     uglifier (2.1.1)
       execjs (>= 0.3.0)
       multi_json (~> 1.0, >= 1.0.2)
+    warden (1.2.1)
+      rack (>= 1.0)
     xml-simple (1.1.2)
 
 PLATFORMS
@@ -212,6 +223,8 @@ PLATFORMS
 DEPENDENCIES
   blacklight (~> 4.2.1)
   coffee-rails (~> 3.2.1)
+  devise
+  devise-guests (~> 0.3)
   hydra-head (~> 6.2.0)
   jquery-rails
   rails (= 3.2.13)
