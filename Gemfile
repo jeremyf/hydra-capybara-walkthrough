@@ -43,3 +43,9 @@ gem 'jquery-rails'
 gem "devise"
 gem "devise-guests", "~> 0.3"
 gem "bootstrap-sass"
+
+group :development, :test do
+  gem 'rspec-rails', '~> 2.13.0'
+  gem 'capybara', "~> 2.0.2"
+  gem 'database_cleaner', "~> 0.9.1"
+end
