@@ -26,6 +26,13 @@ Then run your tests:
 
 If you make changes, re-rerun `$ rake`
 
+Alternatively, you can use `$ rspec` to run the tests.
+With `rspec` you easily specify the particular spec file you want to run.
+
+    $rspec spec/models/thing_spec.rb:26
+
+The above will run only the spec found on line 26 of the thing_spec.rb file.
+
 ## My Testing Philosophy
 
 The Open Source ecosystem is fast-moving. Things are evolving. I write tests to
