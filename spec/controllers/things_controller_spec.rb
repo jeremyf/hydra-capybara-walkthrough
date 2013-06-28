@@ -77,7 +77,7 @@ describe ThingsController do
 
       it "redirects to the created thing" do
         post :create, {:thing => valid_attributes}, valid_session
-        response.should redirect_to(Thing.last)
+        response.should redirect_to(assigns(:thing))
       end
     end
 
