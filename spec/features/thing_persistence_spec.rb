@@ -10,11 +10,7 @@ describe 'Thing Persistence' do
     end
 
     pid = extract_pid_from_path(page.current_path)
-    verify_persistence(
-      fedora_path: "#{pid}/datastreams/properties/content",
-      expected_template: "thing/datastreams/properties.xml.erb",
-      attributes: { title: title }
-    )
+    verify_fedora_persistence(Thing, pid, title: title)
   end
 
   it 'is not changed when I view it' do

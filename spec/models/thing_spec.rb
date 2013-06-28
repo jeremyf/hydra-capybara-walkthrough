@@ -23,11 +23,7 @@ describe Thing do
     subject.title = title
     subject.save!
     subject.reload
-    verify_persistence(
-      fedora_path: "#{subject.pid}/datastreams/properties/content",
-      expected_template: "thing/datastreams/properties.xml.erb",
-      attributes: { title: title }
-    )
+    verify_fedora_persistence(subject.class, subject.pid, title: title)
   end
 
 end
