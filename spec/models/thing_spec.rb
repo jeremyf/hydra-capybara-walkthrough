@@ -16,4 +16,13 @@ describe Thing do
     subject.destroy
   end
 
+  let(:title) { "A Specific Title" }
+  it 'should have a title' do
+    subject.title = title
+    subject.save!
+    subject.reload
+    expect(subject.title).to eq(title)
+    subject.destroy
+  end
+
 end
