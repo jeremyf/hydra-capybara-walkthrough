@@ -258,6 +258,7 @@ DEPENDENCIES
   devise
   devise-guests (~> 0.3)
   hydra-head (~> 6.2.0)
+  jettywrapper (~> 1.4.1)
   jquery-rails
   rails (= 3.2.13)
   rspec-rails (~> 2.13.0)
