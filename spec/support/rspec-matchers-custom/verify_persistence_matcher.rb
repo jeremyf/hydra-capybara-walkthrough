@@ -1,5 +1,14 @@
 module ActiveFedora
   # Methods that are helpful for negotiating calls to Fedora
+  #
+  # @TODO - checking only the properties datastream is inadequate, incorporate
+  #   more data streams.
+  # @TODO - the datastreams/URLs to check should be defined on a per Resource
+  #   level; That is to say Thing should say "check [datastreams/properties]"
+  #   The location of templates should be based on conventions mapping to the
+  #   URL.
+  # @TODO - by creating multiple files to check, we will need to alter how the
+  #   matches occur.
   module PersistenceSpecHelper
     def render_templates_with(attributes)
       template_name = "#{String(@klass).underscore}/datastreams/properties.xml.erb"
