@@ -19,7 +19,7 @@ describe 'Thing Persistence' do
       visit thing_path(thing)
     }.to_not(
       change {
-        fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
+        fedora_persistence_for(thing.pid)
       }
     )
   end
@@ -35,10 +35,10 @@ describe 'Thing Persistence' do
       }
     }.to(
       change {
-        fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
+        fedora_persistence_for(thing.pid)
       }.
-      from(rendered_template_for("thing/datastreams/properties.xml.erb", title: title)).
-      to(rendered_template_for("thing/datastreams/properties.xml.erb", title: new_title))
+      from(rendered_template_for(thing.class, title: title)).
+      to(rendered_template_for(thing.class, title: new_title))
     )
   end
 
