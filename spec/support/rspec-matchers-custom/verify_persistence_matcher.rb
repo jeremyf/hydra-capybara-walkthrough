@@ -1,64 +1,95 @@
-module Rspec
-  module Matchers
-    module Custom
-      module VerifyPersistenceMatcher
-        class Matcher < DelegateClass(RSpec::Core::ExampleGroup)
-          attr_accessor :klass, :pid
-          private :klass, :pid
-          def initialize(context, klass, pid)
-            super(context)
-            self.klass = klass
-            self.pid = pid
-          end
+module ActiveFedora
+  # Methods that are helpful for negotiating calls to Fedora
+  module PersistenceSpecHelper
+    def render_templates_with(attributes)
+      template_name = "#{String(@klass).underscore}/datastreams/properties.xml.erb"
+      template = File.read(Rails.root.join('spec/fixtures/expected_fedora_templates', template_name))
+      ERB.new(template).result(binding)
+    end
 
-          def verify_persistence!(attributes)
-            actual = fedora_persistence
-            expected = render_templates_with(attributes)
-            expect(actual).to eq(expected)
-          end
+    def fedora_persistence
+      path = "datastreams/properties/content"
+      uri = base_fedora_url
+      uri.path = File.join("/fedora-test/objects", String(@pid), path)
+      response = RestClient.get(uri.to_s)
+      response.body
+    end
 
-          def fedora_persistence
-            path = "datastreams/properties/content"
-            uri = base_fedora_url
-            uri.path = File.join("/fedora-test/objects", String(pid), path)
-            response = RestClient.get(uri.to_s)
-            response.body
-          end
+    def base_fedora_url
+      credentials = ActiveFedora.config.credentials
+      uri = URI(credentials.fetch(:url))
+      uri.user = credentials.fetch(:user)
+      uri.password = credentials.fetch(:password)
+      uri
+    end
 
-          def render_templates_with(attributes)
-            template_name = "#{String(klass).underscore}/datastreams/properties.xml.erb"
-            template = File.read(Rails.root.join('spec/fixtures/expected_fedora_templates', template_name))
-            ERB.new(template).result(binding)
-          end
-
-          private
-            def base_fedora_url
-              credentials = ActiveFedora.config.credentials
-              uri = URI(credentials.fetch(:url))
-              uri.user = credentials.fetch(:user)
-              uri.password = credentials.fetch(:password)
-              uri
-            end
-
-        end
-
-        def verify_persistence_matcher(klass, pid)
-          @verify_persistence_matcher ||= Matcher.new(self,klass,pid)
-        end
-        private :verify_persistence_matcher
-
-        def verify_fedora_persistence(klass, pid, attributes = {})
-          verify_persistence_matcher(klass, pid).verify_persistence!(attributes)
-        end
-
-        def fedora_persistence_for(klass, pid)
-          verify_persistence_matcher(klass, pid).fedora_persistence
-        end
-
-        def rendered_template_for(klass, pid, attributes)
-          verify_persistence_matcher(klass, pid).render_templates_with(attributes)
-        end
+    def extract_class_and_pid_from(*context)
+      options = context.extract_options!
+      if options.present?
+        @pid = options[:pid]
+        @klass = options[:class]
+      else
+        @pid = context.first.pid
+        @klass = context.first.class
       end
     end
+  end
+end
+
+RSpec::Matchers.define :have_valid_persistence do |attributes|
+  extend ActiveFedora::PersistenceSpecHelper
+  @attributes = attributes
+
+  match do |context|
+    extract_class_and_pid_from(context)
+    actual = fedora_persistence
+    expected = render_templates_with(@attributes)
+    actual == expected
+  end
+end
+
+RSpec::Matchers.define :change_persistence do |context|
+  extend ActiveFedora::PersistenceSpecHelper
+  extract_class_and_pid_from(context)
+  chain(:from) {|from| @from = from }
+  chain(:to) {|to| @to = to}
+
+  match do |event|
+    validate_from_and_to!
+    @actual_before = evaluate(:from)
+    event.call
+    @actual_after = evaluate(:to)
+    has_changed?
+  end
+
+  def has_changed?
+    @actual_before != @actual_after
+  end
+
+  def validate_from_and_to!
+    if (defined?(@from) && ! defined?(@to))
+      raise(
+        RSpec::Expectations::ExpectationNotMetError,
+        ":from option was declared but not :to"
+      )
+    elsif (defined?(@to) && ! defined?(@from))
+      raise(
+        RSpec::Expectations::ExpectationNotMetError,
+        ":to option was declared but not :from"
+      )
+    end
+  end
+
+  def evaluate(mode)
+    persistence = fedora_persistence
+    if attributes = instance_variable_get("@#{mode}")
+      if render_templates_with(attributes) != persistence
+        raise(
+          RSpec::Expectations::ExpectationNotMetError,
+          "Expected Persistence and Actual Persistence for #{mode.inspect} are not the same."
+        )
+      end
+    end
+    persistence
   end
 end

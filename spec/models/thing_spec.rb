@@ -23,7 +23,8 @@ describe Thing do
     subject.title = title
     subject.save!
     subject.reload
-    verify_fedora_persistence(subject.class, subject.pid, title: title)
+
+    expect(subject).to have_valid_persistence(title: title)
   end
 
 end

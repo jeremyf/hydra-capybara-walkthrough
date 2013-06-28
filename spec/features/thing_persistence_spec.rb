@@ -9,18 +9,15 @@ describe 'Thing Persistence' do
       click_button('Create Thing')
     end
     pid = extract_pid_from_path(page.current_path)
-    verify_fedora_persistence(Thing, pid, title: title)
+
+    expect(class: Thing, pid: pid).to have_valid_persistence(title: title)
   end
 
   it 'is not changed when I view it' do
     thing = Thing.create!(title: title)
-    expect {
+    expect{
       visit thing_path(thing)
-    }.to_not(
-      change {
-        fedora_persistence_for(thing.class, thing.pid)
-      }
-    )
+    }.to_not change_persistence(thing)
   end
 
   it 'is changed when I update it' do
@@ -32,13 +29,9 @@ describe 'Thing Persistence' do
         fill_in('Title', with: new_title)
         click_button('Update Thing')
       }
-    }.to(
-      change {
-        fedora_persistence_for(thing.class, thing.pid)
-      }.
-      from(rendered_template_for(thing.class, thing.pid, title: title)).
-      to(rendered_template_for(thing.class, thing.pid, title: new_title))
-    )
+    }.to change_persistence(thing).
+    from(title: title).
+    to(title: new_title)
   end
 
   def extract_pid_from_path(path)
