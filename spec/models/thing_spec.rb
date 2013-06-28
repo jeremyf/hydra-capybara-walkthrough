@@ -7,13 +7,15 @@ describe Thing do
   include ActiveFedora::TestSupport
   subject { Thing.new }
 
+  after(:each) do
+    subject.destroy if subject.persisted?
+  end
+
   it 'should persist to Fedora' do
     subject.save!
     expect {
       subject.reload
     }.to_not raise_error(ActiveFedora::ObjectNotFoundError)
-
-    subject.destroy
   end
 
   let(:title) { "A Specific Title" }
@@ -22,7 +24,6 @@ describe Thing do
     subject.save!
     subject.reload
     expect(subject.title).to eq(title)
-    subject.destroy
   end
 
 end
