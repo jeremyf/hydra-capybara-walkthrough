@@ -21,9 +21,29 @@ describe 'Thing Persistence' do
     thing = Thing.create!(title: title)
     expect {
       visit thing_path(thing)
-    }.to_not change {
-      fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
-    }
+    }.to_not(
+      change {
+        fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
+      }
+    )
+  end
+
+  it 'is changed when I update it' do
+    thing = Thing.create!(title: title)
+    new_title = title + ' New'
+    expect {
+      visit edit_thing_path(thing)
+      within('.edit_thing') {
+        fill_in('Title', with: new_title)
+        click_button('Update Thing')
+      }
+    }.to(
+      change {
+        fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
+      }.
+      from(rendered_template_for("thing_properties.xml.erb", title: title)).
+      to(rendered_template_for("thing_properties.xml.erb", title: new_title))
+    )
   end
 
   def extract_pid_from_path(path)
