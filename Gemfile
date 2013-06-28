@@ -5,6 +5,7 @@ gem 'rails', '3.2.13'
 gem 'blacklight', '~>4.2.1'
 gem 'hydra-head', '~>6.2.0'
 gem 'jettywrapper', '~>1.4.1'
+gem 'active-fedora', '~>6.4.0.rc4'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
