@@ -17,6 +17,15 @@ describe 'Thing Persistence' do
     )
   end
 
+  it 'is not changed when I view it' do
+    thing = Thing.create!(title: title)
+    expect {
+      visit thing_path(thing)
+    }.to_not change {
+      fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
+    }
+  end
+
   def extract_pid_from_path(path)
     page.current_path.split("/").grep(/^changeme:/).first
   end
