@@ -12,7 +12,7 @@ describe 'Thing Persistence' do
     pid = extract_pid_from_path(page.current_path)
     verify_persistence(
       fedora_path: "#{pid}/datastreams/properties/content",
-      expected_template: "thing_properties.xml.erb",
+      expected_template: "thing/datastreams/properties.xml.erb",
       attributes: { title: title }
     )
   end
@@ -41,8 +41,8 @@ describe 'Thing Persistence' do
       change {
         fedora_persistence_for("#{thing.pid}/datastreams/properties/content")
       }.
-      from(rendered_template_for("thing_properties.xml.erb", title: title)).
-      to(rendered_template_for("thing_properties.xml.erb", title: new_title))
+      from(rendered_template_for("thing/datastreams/properties.xml.erb", title: title)).
+      to(rendered_template_for("thing/datastreams/properties.xml.erb", title: new_title))
     )
   end
 

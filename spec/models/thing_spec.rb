@@ -25,7 +25,7 @@ describe Thing do
     subject.reload
     verify_persistence(
       fedora_path: "#{subject.pid}/datastreams/properties/content",
-      expected_template: "thing_properties.xml.erb",
+      expected_template: "thing/datastreams/properties.xml.erb",
       attributes: { title: title }
     )
   end
