@@ -32,6 +32,7 @@ describe ThingsController do
 
   describe "GET index" do
     it "assigns all things as @things" do
+      Thing.all.each {|thing| thing.destroy }
       thing = Thing.create! valid_attributes
       get :index, {}, valid_session
       assigns(:things).should eq([thing])
