@@ -8,7 +8,6 @@ describe 'Thing Persistence' do
       fill_in('Title', with: title)
       click_button('Create Thing')
     end
-
     pid = extract_pid_from_path(page.current_path)
     verify_fedora_persistence(Thing, pid, title: title)
   end
@@ -19,7 +18,7 @@ describe 'Thing Persistence' do
       visit thing_path(thing)
     }.to_not(
       change {
-        fedora_persistence_for(thing.pid)
+        fedora_persistence_for(thing.class, thing.pid)
       }
     )
   end
@@ -35,10 +34,10 @@ describe 'Thing Persistence' do
       }
     }.to(
       change {
-        fedora_persistence_for(thing.pid)
+        fedora_persistence_for(thing.class, thing.pid)
       }.
-      from(rendered_template_for(thing.class, title: title)).
-      to(rendered_template_for(thing.class, title: new_title))
+      from(rendered_template_for(thing.class, thing.pid, title: title)).
+      to(rendered_template_for(thing.class, thing.pid, title: new_title))
     )
   end
 
