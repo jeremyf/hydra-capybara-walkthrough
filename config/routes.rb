@@ -6,6 +6,8 @@ HydraCapybaraWalkthrough::Application.routes.draw do
 
   devise_for :users
 
+  resources :things
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
