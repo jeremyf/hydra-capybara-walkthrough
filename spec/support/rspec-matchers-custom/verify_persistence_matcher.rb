@@ -7,7 +7,7 @@ module Rspec
           template_name = options.fetch(:expected_template)
           attributes = options.fetch(:attributes)
 
-          actual = response_body_for(path)
+          actual = fedora_persistence_for(path)
           expected = rendered_template_for(template_name, attributes)
           expect(actual).to eq(expected)
         end
@@ -17,7 +17,7 @@ module Rspec
           ERB.new(template).result(binding)
         end
 
-        def response_body_for(path)
+        def fedora_persistence_for(path)
           uri = base_fedora_url
           uri.path = File.join("/fedora-test/objects", path)
           response = RestClient.get(uri.to_s)
