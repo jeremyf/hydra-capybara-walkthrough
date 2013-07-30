@@ -300,13 +300,12 @@
 
     
 
-[Generating COMMIT-LOG-REVERSE.md for reference \[5334a6e\]](https://github.com/jeremyf/hydra-capybara-walkthrough/commit/5334a6e34a338b27eddbc8a2a739e03829a1418e)
+[Generating COMMIT-LOG-REVERSE.md for reference \[42201fd\]](https://github.com/jeremyf/hydra-capybara-walkthrough/commit/42201fd6df27f7aa7b9baf29b55044d990a4bba5)
 
     Script
-    $ git log --reverse --pretty="[%s \[%h\]](https://github.com/jeremyf/hydra-capybara-walkthrough/commit/%H)%n%n%w(80,4,4)%b%n"
-    > COMMIT-LOG-REVERSE.md
+    $ git log --reverse --pretty="[%s \[%h\]](https://github.com/jeremyf/hydra-capybara-walkthrough/commit/%H)%n%n%w(80,4,4)%b%n" > COMMIT-LOG-REVERSE.md
 
-    This commit was ammended via `git commit --amend` to ensure that
+    This commit was ammended via `git commit --amend` to ensure that 
     COMMIT-LOG-REVERSE.md includes this commit message.
 
 
